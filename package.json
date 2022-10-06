@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "chance": "^1.1.8",
+    "express": "^4.18.1",
+    "socket.io": "^4.5.2",
+    "socket.io-client": "^4.5.2"
+  },
+  "name": "cf-comedy-night",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "eslint **/*.js",
+    "test": "jest --verbose --coverage",
+    "test-watch": "jest --watchAll --verbose --coverage",
+    "db:config": "sequelize init:config",
+    "db:create": "sequelize db:create"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nurselaine/cf-comedy-night.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nurselaine/cf-comedy-night/issues"
+  },
+  "homepage": "https://github.com/nurselaine/cf-comedy-night#readme"
+}
