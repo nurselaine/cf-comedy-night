@@ -5,7 +5,7 @@ class Queue{
     this.data = {};
   }
 
-  add(key, value){
+  store(key, value){
     this.data[key] = value;
     return key;
   }

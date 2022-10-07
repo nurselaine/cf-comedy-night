@@ -25,7 +25,7 @@ jokes.on('connection', (socket) => {
     }
 
     jokerQueue.store(payload.messageId, payload);
-    socket.emit('GETSHOW', payload);
+    jokes.emit('GETSHOW', payload);
   });
 
   socket.on('JOKE', payload => {
@@ -36,7 +36,7 @@ jokes.on('connection', (socket) => {
     };
 
     audienceQueue.store(payload.messageId, payload);
-    socket.emit('JOKE', payload);
+    jokes.emit('JOKE', payload);
   });
 
   socket.on('LAUGH', payload => {
@@ -46,7 +46,7 @@ jokes.on('connection', (socket) => {
     };
 
     jokerQueue.store(payload.messageId, payload);
-    socket.emit('LAUGH', payload);
+    jokes.emit('LAUGH', payload);
   });
 
   socket.on('RECEIVED', payload => {
@@ -57,7 +57,7 @@ jokes.on('connection', (socket) => {
     };
 
     let message = currentQueue.remove(payload.messageId);
-    socket.to(payload.queueId).emit('RECEIVED', message);
+    jokes.to(payload.queueId).emit('RECEIVED', message);
   });
 
   socket.on('GET_ALL', payload => {
@@ -65,9 +65,9 @@ jokes.on('connection', (socket) => {
     let currentQueue = messageQueue.read(payload.queueId);
     if(currentQueue && currentQueue.data){
       Object.keys(currentQueue.data).forEach(messageId => {
-        socket.emit('LAUGH', currentQueue.read(messageId));
+        jokes.emit('LAUGH', currentQueue.read(messageId));
       });
     }
   });
 
-})
+});
