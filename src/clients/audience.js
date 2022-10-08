@@ -6,8 +6,8 @@ const audience = new MessageClient('Audience');
 audience.publish('GET_ALL', {queueID: 'Audience'});
 
 setInterval(() => {
+  console.log('Tell us a joke!');
   audience.publish('GETSHOW', () => {
-    console.log('Tell us a joke!');
   });
 }, 5000);
 
