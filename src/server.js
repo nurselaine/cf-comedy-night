@@ -66,7 +66,8 @@ jokes.on('connection', (socket) => {
   });
 
   socket.on('GET_ALL', payload => {
-    let currentQueue = messageQueue.read(payload.queueId);
+    console.log('get all server function', payload);
+    let currentQueue = messageQueue.read(payload.queueID);
     if(currentQueue && currentQueue.data){
       Object.keys(currentQueue.data).forEach(messageId => {
         jokes.emit('LAUGH', currentQueue.read(messageId));
