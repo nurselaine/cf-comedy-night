@@ -12,7 +12,7 @@ setInterval(() => {
   const payload = {
     queueId: 'Audience',
     message: 'Tell us a joke!',
-  }
+  };
 
   console.log('Tell us a joke!');
   audience.publish('GETSHOW', { messageId: chance.guid(), payload });
@@ -20,7 +20,8 @@ setInterval(() => {
 
 audience.subscribe('JOKE', (payload) => {
   console.log('HAHAHAHA');
-  audience.publish('LAUGH', payload);
+  // audience.publish('LAUGH', payload);
+  audience.publish('RECEIVED', payload);
 });
 
 audience.subscribe('RECEIVED', (payload) => {
