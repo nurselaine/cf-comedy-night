@@ -15,4 +15,4 @@
 - nagivate 3 terminals for joker, audience, and server
 - start each file and the following should appear
 
-## ![UML]('./assets/lab15-UML.png')
+## ![UML](./assets/lab15-UML.png)
