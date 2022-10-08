@@ -1,10 +1,14 @@
-# cf-comedy-night
+# Code Fellow Comedy Night
 
 ## Authors: Xavier Hillman & Elaine Huynh
 
 ### Problem Domain
 
     Using socket.io to demonstrate a comedy show's events. Implementing a messenger Queue to hold information of the clients disconnect from the joker and the JOKE API that a messenger can use to emit to a receiver.
+
+## Setup
+
+`npm i socket.io socket.io-client axios chance`
 
 ## Start
 
