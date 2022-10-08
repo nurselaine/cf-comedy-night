@@ -1,6 +1,5 @@
 'use strict';
 
-const { eventNames } = require('process');
 const { Server } = require('socket.io');
 const Queue = require('./lib/Queue');
 
@@ -33,10 +32,10 @@ jokes.on('connection', (socket) => {
   socket.on('JOKE', payload => {
     eventLogger(payload, 'joke');
     let audienceQueue = messageQueue.read(payload.queueId);
-  if(!audienceQueue){
+    if(!audienceQueue){
       let queueKey = messageQueue.store(payload.queueId, new Queue());
       audienceQueue = messageQueue.read(queueKey);
-    };
+    }
 
     audienceQueue.store(payload.messageId, payload);
     jokes.emit('JOKE', payload);
@@ -47,7 +46,7 @@ jokes.on('connection', (socket) => {
     let jokerQueue = messageQueue.read(payload.queueId);
     if(!jokerQueue){
       throw new Error('Joker Queue does not exist');
-    };
+    }
 
     jokerQueue.store(payload.messageId, payload);
     jokes.emit('LAUGH', payload);
@@ -59,7 +58,7 @@ jokes.on('connection', (socket) => {
 
     if(!currentQueue){
       throw new Error('Queue does not exist');
-    };
+    }
 
     let message = currentQueue.remove(payload.messageId);
     jokes.to(payload.queueId).emit('RECEIVED', message);
@@ -81,6 +80,6 @@ function eventLogger(payload, event){
   const body = {
     EVENT: event,
     payload,
-  }
+  };
   console.log(body);
 }
