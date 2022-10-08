@@ -19,13 +19,17 @@ jokes.on('connection', (socket) => {
 
   socket.on('GETSHOW', (payload) => {
     eventLogger(payload, 'get show');
-    let jokerQueue = messageQueue.read(payload.queueId);
-    if(!jokerQueue){
-      let queueKey = messageQueue.store(payload.queueId, new Queue());
-      jokerQueue = messageQueue.read(queueKey);
-    }
 
-    jokerQueue.store(payload.messageId, payload);
+    console.log(`SERVER: get show ${JSON.stringify(payload)}`)
+    let audienceQueue = messageQueue.read(payload.payload.queueId);
+    if(!audienceQueue){
+      let queueKey = messageQueue.store(payload.payload.queueId, new Queue());
+      audienceQueue = messageQueue.read(queueKey);
+    }
+    console.log('message queue added audienceq :::::::::::::::::::', messageQueue);
+
+    audienceQueue.store(payload.messageId, payload);
+    console.log('audience queue added :::::::::::::::::::', audienceQueue);
     jokes.emit('GETSHOW', payload);
   });
 
@@ -36,43 +40,44 @@ jokes.on('connection', (socket) => {
       let queueKey = messageQueue.store(payload.queueId, new Queue());
       audienceQueue = messageQueue.read(queueKey);
     }
+    console.log('audience queue added :::::::::::::::::::',messageQueue);
 
     audienceQueue.store(payload.messageId, payload);
     jokes.emit('JOKE', payload);
   });
 
-  socket.on('LAUGH', payload => {
-    eventLogger(payload, 'laugh');
-    let jokerQueue = messageQueue.read(payload.queueId);
-    if(!jokerQueue){
-      throw new Error('Joker Queue does not exist');
-    }
+  // socket.on('LAUGH', payload => {
+  //   eventLogger(payload, 'laugh');
+  //   // let jokerQueue = messageQueue.read(payload.queueId);
+  //   // if(!jokerQueue){
+  //   //   throw new Error('Joker Queue does not exist');
+  //   // }
 
-    jokerQueue.store(payload.messageId, payload);
-    jokes.emit('LAUGH', payload);
-  });
+  //   // jokerQueue.store(payload.messageId, payload);
+  //   // jokes.emit('LAUGH', payload);
+  // });
 
-  socket.on('RECEIVED', payload => {
-    eventLogger(payload, 'received');
-    let currentQueue = messageQueue.read(payload.queueId);
+  // socket.on('RECEIVED', payload => {
+  //   eventLogger(payload, 'received');
+  //   let currentQueue = messageQueue.read(payload.queueId);
 
-    if(!currentQueue){
-      throw new Error('Queue does not exist');
-    }
+  //   if(!currentQueue){
+  //     throw new Error('Queue does not exist');
+  //   }
 
-    let message = currentQueue.remove(payload.messageId);
-    jokes.to(payload.queueId).emit('RECEIVED', message);
-  });
+  //   let message = currentQueue.remove(payload.messageId);
+  //   jokes.to(payload.queueId).emit('RECEIVED', message);
+  // });
 
-  socket.on('GET_ALL', payload => {
-    console.log('get all server function', payload);
-    let currentQueue = messageQueue.read(payload.queueID);
-    if(currentQueue && currentQueue.data){
-      Object.keys(currentQueue.data).forEach(messageId => {
-        jokes.emit('LAUGH', currentQueue.read(messageId));
-      });
-    }
-  });
+  // socket.on('GET_ALL', payload => {
+  //   console.log('get all server function', payload);
+  //   let currentQueue = messageQueue.read(payload.queueID);
+  //   if(currentQueue && currentQueue.data){
+  //     Object.keys(currentQueue.data).forEach(messageId => {
+  //       jokes.emit('LAUGH', currentQueue.read(messageId));
+  //     });
+  //   }
+  // });
 
 });
 
