@@ -20,47 +20,31 @@ jokes.on('connection', (socket) => {
   socket.on('GETSHOW', (payload) => {
     eventLogger(payload, 'get show');
 
-    console.log(`SERVER: get show ${JSON.stringify(payload)}`);
     let audienceQueue = messageQueue.read(payload.payload.queueId);
     if(!audienceQueue){
       let queueKey = messageQueue.store(payload.payload.queueId, new Queue());
       audienceQueue = messageQueue.read(queueKey);
     }
-    console.log('message queue added audienceq :::::::::::::::::::', messageQueue);
 
     audienceQueue.store(payload.messageId, payload);
-    console.log('audience queue added :::::::::::::::::::', audienceQueue);
     jokes.emit('GETSHOW', payload);
   });
 
   socket.on('JOKE', payload => {
     eventLogger(payload, 'joke');
-    console.log('PAYLOAD:::::::::::::', payload);
     let jokerQueue = messageQueue.read(payload.queueId);
     if(!jokerQueue){
       let queueKey = messageQueue.store(payload.queueId, new Queue());
       jokerQueue = messageQueue.read(queueKey);
     }
-    console.log('audience queue added :::::::::::::::::::', messageQueue);
 
     jokerQueue.store(payload.messageId, payload);
     jokes.emit('JOKE', payload);
+    jokes.emit('RECEIVED', payload);
   });
-
-  // socket.on('LAUGH', payload => {
-  //   eventLogger(payload, 'laugh');
-  //   let jokerQueue = messageQueue.read(payload.payload.queueId);
-  //   if(!jokerQueue){
-  //     throw new Error('Joker Queue does not exist');
-  //   }
-
-  //   jokerQueue.store(payload.messageId, payload);
-  //   jokes.emit('LAUGH', payload);
-  // });
 
   socket.on('RECEIVED', payload => {
     eventLogger(payload, 'received');
-    console.log('RECEIVED LOG::::::::', payload);
     let currentQueue = messageQueue.read(payload.queueId);
 
     if(!currentQueue){
@@ -73,11 +57,12 @@ jokes.on('connection', (socket) => {
   });
 
   socket.on('GET_ALL', payload => {
-    console.log('get all server function', payload);
     let currentQueue = messageQueue.read(payload.queueId);
+    console.log('joker queue::::::::::::::::', currentQueue)
     if(currentQueue && currentQueue.data){
       Object.keys(currentQueue.data).forEach(messageId => {
-        jokes.emit('LAUGH', currentQueue.read(messageId));
+        console.log('joker payloads ::::::::::', currentQueue.read(messageId));
+        jokes.emit('RECEIVED', currentQueue.read(messageId));
       });
     }
   });

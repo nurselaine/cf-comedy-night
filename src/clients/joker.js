@@ -19,8 +19,7 @@ joker.subscribe('GETSHOW', async () => {
   }
   let payload = {
     messageId: chance.guid(),
-    queueId: 'Joker',
-    jokeID: chance.guid(),
+    queueId: 'Audience',
     joke: joke.data.setup,
     punchline: joke.data.delivery,
   };
@@ -29,11 +28,5 @@ joker.subscribe('GETSHOW', async () => {
     console.log(`${payload.punchline}`);
   }, 1000);
   joker.publish('JOKE', payload);
-  joker.publish('RECEIVED', payload);
 
 });
-
-// joker.subscribe('LAUGH', (payload) => {
-//   console.log('Thank you! Thank you!');
-//   joker.publish('RECEIVED', payload);
-// });

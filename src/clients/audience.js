@@ -10,21 +10,20 @@ audience.publish('GET_ALL', {queueID: 'Audience'});
 
 setInterval(() => {
   const payload = {
-    queueId: 'Audience',
+    queueId: 'Joker',
     message: 'Tell us a joke!',
   };
 
   console.log('Tell us a joke!');
   audience.publish('GETSHOW', { messageId: chance.guid(), payload });
-}, 5000);
+}, 10000);
 
 audience.subscribe('JOKE', (payload) => {
   console.log('HAHAHAHA');
-  // audience.publish('LAUGH', payload);
   audience.publish('RECEIVED', payload);
 });
 
 audience.subscribe('RECEIVED', (payload) => {
-  console.log(`Joke ${payload.jokeID} was hilarious!`);
+  console.log(`Joke ${payload.messageId} was hilarious!`);
 });
 
