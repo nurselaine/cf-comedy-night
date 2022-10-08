@@ -8,7 +8,7 @@ const Chance = require('chance');
 const chance = new Chance();
 
 
-joker.publish('GET_ALL', {queueID: 'Joker'});
+joker.publish('GET_ALL', {queueId: 'Joker'});
 
 joker.subscribe('GETSHOW', async () => {
   let joke;
@@ -17,8 +17,9 @@ joker.subscribe('GETSHOW', async () => {
   } catch(e) {
     console.log(`Error: ${e}`);
   }
-
   let payload = {
+    messageId: chance.guid(),
+    queueId: 'Joker',
     jokeID: chance.guid(),
     joke: joke.data.setup,
     punchline: joke.data.delivery,
@@ -27,10 +28,12 @@ joker.subscribe('GETSHOW', async () => {
   setTimeout(() => {
     console.log(`${payload.punchline}`);
   }, 1000);
-  joker.publish('JOKE', { messageId: chance.guid(), ...payload });
+  joker.publish('JOKE', payload);
+  joker.publish('RECEIVED', payload);
+
 });
 
-joker.subscribe('LAUGH', (payload) => {
-  console.log('Thank you! Thank you!');
-  joker.publish('RECEIVED', payload);
-});
+// joker.subscribe('LAUGH', (payload) => {
+//   console.log('Thank you! Thank you!');
+//   joker.publish('RECEIVED', payload);
+// });
